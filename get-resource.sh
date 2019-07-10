@@ -13,6 +13,22 @@ TMPDIR=$(mktemp -d)
 mkdir -p /shared/html/images
 cd /shared/html/images
 
+# Is this a RHEL based image? If so the IPA image is already here, so
+# we don't need to download it
+if [ -e /usr/share/rhosp-director-images/ironic-python-agent-latest.tar ] ; then
+    VERSION=$(cat /usr/share/rhosp-director-images/version-latest.txt)
+    if [ ! -e $FILENAME-$VERSION ] ; then
+        cd $TMPDIR
+        tar -xf /usr/share/rhosp-director-images/ironic-python-agent-latest.tar
+        chmod 755 $TMPDIR
+        cd -
+        mv $TMPDIR $FILENAME-$VERSION
+    fi
+    ln -sf $FILENAME-$VERSION/$FILENAME.initramfs $FILENAME.initramfs
+    ln -sf $FILENAME-$VERSION/$FILENAME.kernel $FILENAME.kernel
+    exit 0
+fi
+
 # If we have a CACHEURL and nothing has yet been downloaded
 # get header info from the cache
 ls -l
