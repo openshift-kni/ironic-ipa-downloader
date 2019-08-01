@@ -6,4 +6,3 @@ RUN yum update -y \
 RUN yum install -y rhosp-director-images-ipa-x86_64
 
 COPY ./get-resource.sh /usr/local/bin/get-resource.sh
-
