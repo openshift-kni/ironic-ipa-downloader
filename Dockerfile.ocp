@@ -3,6 +3,6 @@ FROM ubi8
 RUN yum update -y \
  && yum clean all
 
-RUN yum install -y rhosp-director-images-ipa-x86_64
+RUN yum install -y rhosp-director-images-ipa-$(uname -m)
 
 COPY ./get-resource.sh /usr/local/bin/get-resource.sh
