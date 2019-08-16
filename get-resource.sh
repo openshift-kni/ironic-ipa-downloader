@@ -33,7 +33,7 @@ fi
 # get header info from the cache
 ls -l
 if [ -n "$CACHEURL" -a ! -e $FFILENAME.headers ] ; then
-    curl --fail -O "$CACHEURL/$FFILENAME.headers"
+    curl --fail -O "$CACHEURL/$FFILENAME.headers" || true
 fi
 
 # Download the most recent version of IPA
