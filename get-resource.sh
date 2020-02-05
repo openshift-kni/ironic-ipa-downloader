@@ -20,6 +20,19 @@ if [ -e /usr/share/rhosp-director-images/ironic-python-agent-latest.tar ] ; then
     if [ ! -e $FILENAME-$VERSION ] ; then
         cd $TMPDIR
         tar -xf /usr/share/rhosp-director-images/ironic-python-agent-latest.tar
+
+        # Update netconfig to use MAC for DUID/IAID combo (same as RHCOS)
+        # FIXME: we need an alternative of this packaged
+        gzip -dc ironic-python-agent.initramfs > ironic-python-agent.data
+        mkdir -p etc/NetworkManager/conf.d/ etc/NetworkManager/dispatcher.d
+        echo -e '[main]\ndhcp=dhclient\n[connection]\nipv6.dhcp-duid=ll' > etc/NetworkManager/conf.d/clientid.conf
+        echo -e '[[ "$DHCP6_FQDN_FQDN" =~ - ]] && hostname $DHCP6_FQDN_FQDN' > etc/NetworkManager/dispatcher.d/01-hostname
+        chmod +x etc/NetworkManager/dispatcher.d/01-hostname
+        echo -e  "./etc/NetworkManager/conf.d/clientid.conf\n./etc/NetworkManager/dispatcher.d/01-hostname" | cpio -H newc -o >> ironic-python-agent.data
+        gzip -5 ironic-python-agent.data
+        mv ironic-python-agent.data.gz ironic-python-agent.initramfs
+        rm -rf etc
+
         chmod 755 $TMPDIR
         cd -
         mv $TMPDIR $FILENAME-$VERSION

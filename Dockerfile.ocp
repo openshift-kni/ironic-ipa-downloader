@@ -3,8 +3,8 @@ FROM ubi8
 # We don't need the deps that rhosp-director-images-ipa pulls in
 # use rpm to install without them to keep the image size down as
 # much as possible
-RUN yum install -y rhosp-director-images-ipa-$(uname -m) --downloadonly --downloaddir=/tmp/packages && \
-    rpm -i --nodeps /tmp/packages/rhosp-release-* /tmp/packages/rhosp-director-images-ipa-* && \
+RUN yum install -y rhosp-director-images-ipa-$(uname -m) cpio --downloadonly --downloaddir=/tmp/packages && \
+    rpm -i --nodeps /tmp/packages/rhosp-release-* /tmp/packages/rhosp-director-images-ipa-* /tmp/packages/cpio* && \
     rm -rf /tmp/packages && \
     yum clean all
 
