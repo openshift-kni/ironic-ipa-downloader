@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+FROM registry.access.redhat.com/ubi8/ubi
 
 # We don't need the deps that rhosp-director-images-ipa pulls in
 # use rpm to install without them to keep the image size down as
